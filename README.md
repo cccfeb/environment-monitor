@@ -1,45 +1,39 @@
-# IoT Reference Implementation: How to Build an Environment Monitor Solution
+# Reference Implementation: How to Build an Environment Monitor Solution
+
+## What it Does
 
 This guide demonstrates how existing IoT solutions can be adapted to address more complex problems (e.g., solutions that require more sensor monitoring). The solution we present here, an Environment Monitor, incorporates additional hardware and extends the use of IoT software libraries (sensors and I/O).
 
-The Environment Monitor solution described in this how-to guide is built using an UP Squared\* board, and Grove* sensors available from Seeed\* Studio. The solution runs on an UP Squared* board (running Ubuntu\* Server) with the [Intel® System Studio], which creates the code to enable the sensors.
+The Environment Monitor solution described in this how-to guide is built using an UP Squared\* Grove* IoT Development Kit available from Seeed\* Studio. The solution runs on an UP Squared Grove IoT Development Kit (running Ubuntu\* Server) with Intel® System Studio to enable the sensors.
 
-This solution is built around MRAA (I/O library) and UPM (sensor library) from the [Intel® IoT Developer Kit](https://software.intel.com/en-us/iot/hardware/dev-kit), which powers the interface between the platform I/O and sensor data. In this case, the MRAA library provides an abstraction layer for the hardware to enable direct access to the on board I/O using Firmata. The UPM sensor library was developed on top of MRAA, and exposes a user-friendly API that will allow the user to capture sensor data with just a few lines of code. Data is then sent periodically to Amazon Web Services (AWS)* using MQTT.
+## How it Works
 
+This solution is built around MRAA (I/O library) and UPM (sensor library) from the [UP Squared* Grove* IoT Development Kit](https://software.intel.com/en-us/iot/hardware/dev-kit), which powers the interface between the platform I/O and sensor data. In this case, the MRAA library provides an abstraction layer for the hardware to enable direct access to the on board I/O using Firmata. The UPM sensor library was developed on top of MRAA, and exposes a user-friendly API that will allow the user to capture sensor data with just a few lines of code. Data is then sent periodically to Amazon Web Services (AWS)* using MQTT.
 
---------------------------------------------------------------------------------------
-How to Build the Environment Monitor Solution
---------------------------------------------------------------------------------------
-From this exercise, developers will learn how to:
- * **Setup the system hardware**
-        UP Squared\* Board
-        Sensors
- * **Install and configure the required software**
-        Ubuntu\* Server
-        IoT Software Libraries ([MRAA](http://mraa.io) and [UPM](http://upm.mraa.io)
-        [Intel® System Studio] (IDE)
- * **Connect to Cloud Services**
-        Amazon Web Services (AWS)\* using MQTT
+## Requirements
+### Hardware
+- UP Squared Grove IoT Development Kit
+- Sensors
 
+### Software
+- Ubuntu\* Server
+- IoT Software Libraries ([MRAA](http://mraa.io) and [UPM](http://upm.mraa.io))
+- Intel® System Studio
+- Amazon Web Services (AWS)\* using MQTT
 
+## Setup the System Hardware
 
-------------------------------------------------------
-Setup the System Hardware
-------------------------------------------------------
 This section describes how to set up all the required hardware for an Intelligent Vending Machine: UP Squared\* and Grove\* Sensors.
 
-Setting up the UP² for this solution consists of the following steps:
+Setting up the UP Squared Grove IoT Development Kit for this solution consists of the following steps:
 
-1. Connect a monitor via the HDMI\* or VGA port and a USB keyboard. These are required for OS deployment and can be removed after the UP² has been connected to the network and a connection from the development environment has been established.
+1. Connect a monitor via the HDMI\* or VGA port and a USB keyboard. These are required for OS deployment and can be removed after the Up Sqared has been connected to the network and a connection from the development environment has been established.
 
 2. Plug in an Ethernet cable from your network’s router.
 
-3. Plug in the power supply for the UP² but DO NOT press the power button yet. First connect the GrovePi and other hardware components and then power on the UP².
+3. Plug in the power supply for the UP Squared but DO NOT press the power button yet. First connect the GrovePi and other hardware components and then power on the UP Squared.
 
-
-----------------------------------------------------------
-Sensor Setup
-----------------------------------------------------------
+### Sensor Setup
 
 The sensors used for this project are listed in Table 1.
 
@@ -62,28 +56,21 @@ Table 1. Bill of Materials
 | [Grove\* - Dust Sensor](https://www.seeedstudio.com/Grove-Dust-Sensor-p-1050.html) | Particulate matter sensor | D4 | Digital |
 | [Grove\* - Temp&Humi&Barometer Sensor (BME280)](https://www.seeedstudio.com/Grove---Temp%26amp%3BHumi%26amp%3BBarometer-Sensor-(BME280)-p-2653.html) | Temperature, humidity, barometer sensor | I2C Bus | I2C |
 
-**Note:** here a green LED is used, but any color LED (red, blue, etc.) can be used as an indicator.
+**Note:** A green LED is used, but any color LED (red, blue, etc.) can be used as an indicator.
 
----------------------------------------------------
-Install and Configure the Required Software
----------------------------------------------------
+### Install and Configure the Required Software
 
-This section gives instructions for installation of the operating system and connecting UP² to the Internet, installing required software libraries, and finally cloning the project sources from a GitHub\* repository.
+This section gives instructions for installation of the operating system and connecting UP Squared to the Internet, installing required software libraries, and finally cloning the project sources from a GitHub\* repository.
 	
----------------------------------
-Installing the OS: Ubuntu\* Server
----------------------------------
+### Installing the OS: Ubuntu\* Server
 
-Follow the instruction in https://www.ubuntu.com/download/iot/up-squared-iot-grove-server to install Ubuntu on UP², if not already installed.
+Follow the instruction in https://www.ubuntu.com/download/iot/up-squared-iot-grove-server to install Ubuntu on UP Squared, if not already installed.
 
------------------------------------
-Connecting the UP²\* to the Internet
------------------------------------
+### Connecting the UP Squared to the Internet
 
-This section describes how to connect the UP² to your network, which will enable you to deploy and run the project from a different host on the same network (i.e. your laptop). Internet access is required in order to download the additional software libraries and the project code.
+This section describes how to connect the UP Squared to your network, which will enable you to deploy and run the project from a different host on the same network (i.e. your laptop). Internet access is required in order to download the additional software libraries and the project code.
 
-Additional Configuration via the Terminal (Shell) on the UP²\*
-------------------------------------
+### Additional Configuration via the Terminal (Shell) on the UP Squared
 
 #### Ethernet
 
@@ -134,9 +121,7 @@ This is an optional step that only applies if a wireless card has been added to 
         ifup wlp2s0
         ```
 
----------------------------------------------
-Installing the MRAA and UPM libraries on UP²\*
----------------------------------------------
+#### Installing the MRAA and UPM libraries on UP Squared
 
 In order to put UPM and MRAA on your system, you can just use the MRAA:PPA to update the libraries. The instructions are as follows:
 
@@ -154,11 +139,9 @@ UPM instructions: https://github.com/intel-iot-devkit/upm/blob/master/docs/build
 Install node and npm.
 
 **Note:**
-Now we can disconnect the monitor and keyboard from UP², as we can remotely access the UP² using its IP address. This requires that the  Laptop/Desktop to be on the same network as UP².
+Now we can disconnect the monitor and keyboard from UP Squared, as we can remotely access the UP Squared using its IP address. This requires that the Laptop/Desktop to be on the same network as UP Squared.
 
---------------------------------------------
 ## Setup and Connect to the Cloud Data Store
---------------------------------------------
 
 ### AWS\* IOT Core
 
@@ -175,9 +158,7 @@ scp -r <path where privatekey is present>  upsquared:##.###.##.##:/home/upsquare
 scp -r <path where RootCA is present>  upsquared:##.###.##.##:/home/upsquared/	
 ```
 
----------------------------
-Connection to the Localhost
----------------------------
+### Connection to Localhost
 
 1. Install mosquitto with websocket connection on the UP Squared board.(http://goochgooch.co.uk/2014/08/01/building-mosquitto-1-4/)
 
@@ -187,9 +168,8 @@ Connection to the Localhost
 
 3. Start the mosquitto on upsquared by sudo mosquitto -v -c /etc/mosquitto/mosquitto.conf.
 
------------------------------------------
-Add the Solution to Intel® System Studio
------------------------------------------
+### Add the Solution to Intel® System Studio
+
 This section explains how to add the solution to Intel® System Studio, including creating a new project and populating it with the files needed for it to build and run.
 
 1. Open Intel® System Studio. It will start by asking for a workspace directory. Choose one and then click **OK**.
@@ -202,7 +182,7 @@ This section explains how to add the solution to Intel® System Studio, includin
 7. Copy all the files present in the src folder to the respective files.   
 8. Next, right click on the project name and follow the sequence: Properties > C/C++ Build > Settings > GNU 64-bit G++ Linker > Libraries and then Add libraies:  mraa, upm-bmp280, upm-led, paho-mqtt3cs, upm-gas, upm-ppd42ns, upmc-utilities. This can be done by clicking on the small green '+' icon on the top right side of the libraries view
 
-9. In order to run this project, connect to the UP² first using the IP address already provided. Follow the instructions in "https://software.intel.com/en-us/developing-projects-with-intel-system-studio-c-creating-an-ssh-connection" to connect to UP²  as root. This is required to use pins on board.
+9. In order to run this project, connect to the UP Squared first using the IP address already provided. Follow the instructions in "https://software.intel.com/en-us/developing-projects-with-intel-system-studio-c-creating-an-ssh-connection" to connect to UP Squared  as root. This is required to use pins on board.
 
 10. Go to Run configurations, and in the Commands to execute before application field, type the following:
 
@@ -219,9 +199,8 @@ This section explains how to add the solution to Intel® System Studio, includin
   Click the **Apply** button to save these settings.
   Click the **Run** button to run the code on your board.
   
------------------------------------------------------------------
-Create the Development and Runtime Environment on Desktop/Laptop
------------------------------------------------------------------
+## Create the Development and Runtime Environment on Desktop/Laptop
+
 - Download Intel® System Studio from https://software.intel.com/en-us/system-studio and install.
 
 
